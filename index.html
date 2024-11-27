@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script type="text/javascript" src="https://getfirebug.com/firebug-lite-debug.js"></script>
+  <meta name="description" content="CS4406 Computer Graphics - Assignment #2" />
+  <meta charset="utf-8" />
+  <title>Assignment 2</title>
+</head>
+<body>
+  <div id="container"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.5/dat.gui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/94/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.2.1/math.min.js"></script>
+  <script type="text/javascript">
+    // Set the scene size
+    var WIDTH = 500, HEIGHT = 500;
+
+    // Camera attributes
+    var VIEW_ANGLE = 45, ASPECT = WIDTH / HEIGHT, NEAR = 1, FAR = 1000;
+
+    // Create WebGL renderer, scene, and camera
+    var renderer = new THREE.WebGLRenderer();
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+
+    // Position the camera and add it to the scene
+    camera.position.z = 30;
+    scene.add(camera);
+
+    // Set up the renderer size and append it to the body
+    renderer.setSize(WIDTH, HEIGHT);
+    document.body.appendChild(renderer.domElement);
+
+    // Create geometry for the polygon (pentagon)
+    var geometry = new THREE.Geometry();
+    geometry.vertices.push(
+      new THREE.Vector3(0, 2, 0), // Top vertex
+      new THREE.Vector3(-1.9, 0.6, 0), // Top left
+      new THREE.Vector3(-1.2, -1.6, 0), // Bottom left
+      new THREE.Vector3(1.2, -1.6, 0), // Bottom right
+      new THREE.Vector3(1.9, 0.6, 0) // Top right
+    );
+    geometry.faces.push(
+      new THREE.Face3(0, 1, 2), // First triangle
+      new THREE.Face3(0, 2, 3), // Second triangle
+      new THREE.Face3(0, 3, 4), // Third triangle
+      new THREE.Face3(0, 4, 1) // Fourth triangle
+    );
+
+    // Assign a red material to the polygon
+    var material = new THREE.MeshBasicMaterial({
+      color: 0xff0000, // Red color
+      side: THREE.DoubleSide // Render both sides of the polygon
+    });
+
+    // Combine geometry and material into a mesh
+    var pentagon = new THREE.Mesh(geometry, material);
+
+    // Add the pentagon to the scene
+    scene.add(pentagon);
+
+    // Animation function to rotate the pentagon
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // Rotate slowly around x and y axes
+      pentagon.rotation.x += 0.01;
+      pentagon.rotation.y += 0.01;
+
+      // Render the scene
+      renderer.render(scene, camera);
+    }
+
+    // Start the animation
+    animate();
+  </script>
+</body>
+</html>
